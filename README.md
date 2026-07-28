@@ -77,6 +77,14 @@ not just the last command:
 sleep 2 && echo done1 || echo done2 &
 ```
 
+### Foregrounding a background process
+You can use `fg {pid}` to foreground a background process.
+For example if `sudo dnf upgrade` is running in the background with PID = 24134, you can bring it to foreground with 
+```
+fg 24134
+``` 
+*Hint: To see all background processes with their PIDs, run `jobs`* 
+
 ### Scripts
 Scripts are supported. To run a script with MyShell, add the shebang with the path of where `mysh.py` is on top of the script file, for example:
 

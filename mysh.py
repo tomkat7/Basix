@@ -16,6 +16,7 @@ script_mode = len(sys.argv) > 1
 if script_mode:
     script_file = open(sys.argv[1])
 
+shell_pgid = os.getpgrp()
 
 def get_next_cmd():
     username = getpass.getuser()
@@ -51,6 +52,7 @@ config_dir = os.path.expanduser("~/.mysh_config")
 os.makedirs(config_dir, exist_ok=True)
 
 signal.signal(signal.SIGINT, signal.SIG_IGN)
+signal.signal(signal.SIGTTOU, signal.SIG_IGN)
 
 if not script_mode:
     histfile = os.path.expanduser("~/.mysh_config/mysh_history.txt")
@@ -86,6 +88,29 @@ while cmd != "exit" and cmd != None:
                     print(f"[{f.background_pids[i]}]: {f.background_cmds[i]}")
         elif cmd_split[0] == "cd":
             f.cd(cmd_split)
+        elif cmd_split[0] == "fg":
+            if len(cmd_split) != 2:
+                print("Please provide a PID after fg")
+            else:
+                try:
+                    int(cmd_split[1])
+                    is_int = True
+                except ValueError:
+                    print("Enter a valid PID")
+                    is_int = False
+                if is_int:    
+                    if int(cmd_split[1]) in f.background_pids:
+                        try:
+                            os.tcsetpgrp(sys.stdin.fileno(), int(cmd_split[1]))
+                            os.waitpid(int(cmd_split[1]),0)
+                            os.tcsetpgrp(sys.stdin.fileno(),shell_pgid)
+                            index = f.background_pids.index(int(cmd_split[1]))
+                            f.background_cmds.pop(index)
+                            f.background_pids.pop(index)
+                        except OSError as e:
+                            print(f"fg: no such job ({e})", file=sys.stderr)
+                    else:
+                        print("PID not found in background processes")
         else:
             cmd, operations = p.parser(cmd)
             if background:

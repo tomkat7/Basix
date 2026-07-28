@@ -1,9 +1,7 @@
 import os
 import sys
-import shlex
 import signal
 import time
-import re
 import executor as e
 import parser as p
 
