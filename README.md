@@ -60,6 +60,7 @@ time ls | grep .py    # times the whole pipeline/chain, not just the first comma
 sleep 30 &
 ```
 Runs the command without blocking the shell. Background jobs run in their own process group, so they are not killed by Ctrl+C at the prompt. Completion is reported the next time the prompt refreshes:
+
 ```
 [12345]+ Done sleep 30
 ```
@@ -75,6 +76,15 @@ not just the last command:
 ```
 sleep 2 && echo done1 || echo done2 &
 ```
+
+### Scripts
+Scripts are supported. To run a script with MyShell, add the shebang with the path of where `mysh.py` is on top of the script file, for example:
+
+```
+#!/home/user/mysh.py
+```
+
+Then, run the script with `./mysh.py script.sh`
 
 ### Ctrl+C
 Cancels the currently running foreground command without killing the shell itself.

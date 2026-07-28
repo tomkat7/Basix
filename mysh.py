@@ -9,6 +9,36 @@ import signal
 import functions as f
 import parser as p
 import executor as e
+import sys
+
+script_mode = len(sys.argv) > 1
+
+if script_mode:
+    script_file = open(sys.argv[1])
+
+
+def get_next_cmd():
+    username = getpass.getuser()
+    hostname = socket.gethostname()
+    purple = "\001\033[35m\002"
+    green = "\001\033[32m\002"
+    blue = "\001\033[34m\002"
+    default = "\001\033[0m\002"
+    
+    if script_mode:
+        while True:
+            line = script_file.readline()
+            if line == "":
+                return None
+            line = line.rstrip("\n")
+            if line.strip() == "" or line.strip().startswith("#"):
+                continue
+            return line
+    else:
+        print(f"{purple}╭─ {green}{username}{purple}@{green}{hostname}{purple}:{blue}{os.getcwd()}")
+        return input(f"{purple}╰─{default}$")
+
+
 
 purple = "\001\033[35m\002"
 green = "\001\033[32m\002"
@@ -16,23 +46,24 @@ blue = "\001\033[34m\002"
 default = "\001\033[0m\002"
 
 background_finished=[]
+
+config_dir = os.path.expanduser("~/.mysh_config")
+os.makedirs(config_dir, exist_ok=True)
+
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 
-histfile = os.path.expanduser("~/.mysh_history")
-try:
-    readline.read_history_file(histfile)
-except FileNotFoundError:
-    pass
-atexit.register(readline.write_history_file, histfile)
+if not script_mode:
+    histfile = os.path.expanduser("~/.mysh_config/mysh_history.txt")
+    try:
+        readline.read_history_file(histfile)
+    except FileNotFoundError:
+        pass
+    atexit.register(readline.write_history_file, histfile)
+
+cmd = get_next_cmd()
 
 
-username = getpass.getuser()
-hostname = socket.gethostname()
-print(f"{purple}╭─ {green}{username}{purple}@{green}{hostname}{purple}:{blue}{os.getcwd()}")
-cmd = input(f"{purple}╰─{default}$")
-
-
-while cmd != "exit":
+while cmd != "exit" and cmd != None:
     if cmd == "":
         print()
     else:
@@ -81,5 +112,4 @@ while cmd != "exit":
         f.background_cmds.pop(index)
 
     background_finished=[]
-    print(f"{purple}╭─ {green}{username}{purple}@{green}{hostname}{purple}:{blue}{os.getcwd()}")
-    cmd = input(f"{purple}╰─{default}$")
+    cmd = get_next_cmd()

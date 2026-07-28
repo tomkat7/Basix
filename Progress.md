@@ -60,3 +60,7 @@
 
 ## Day 13 - 23/07/26
 - Fixed a bug where commands that needed to hold the terminal (like `watch` or `sudo pacman -Syu`) froze the shell and executed in the background instead of foreground.
+
+## Day 14 - 28/07/26
+- Added support for scripts.
+- Moved the history file and the new config file to `~/.mysh_config/`
