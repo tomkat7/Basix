@@ -43,7 +43,7 @@ def get_next_cmd():
 
 purple = "\001\033[35m\002"
 green = "\001\033[32m\002"
-blue = "\001\033[34m\002"
+blue = "\001\e[0;96m\002"
 default = "\001\033[0m\002"
 
 background_finished=[]
