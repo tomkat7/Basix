@@ -104,7 +104,6 @@ These are documented, intentional gaps — not oversights:
 - **No wildcard/glob expansion**: `ls *.txt` will not expand `*.txt` — the literal string is passed to the command. Deliberately left unimplemented rather than shipping a version that mishandles filenames with spaces.
 - **Background jobs cannot be combined with `time`, or `cd`**: `&` is only supported as the terminator of a single, non-chained command.
 - **No environment variable support**: no `export`, no `$VAR` expansion.
-- **No `fg`/`bg`**: background jobs can be listed with `jobs` but not brought back to the foreground once started.
 - **`cd` cannot be used inside a pipe or chain** (e.g. `cd dir && ls` is not supported)
   It must run standalone, since changing directory only makes sense in the shell's
   own process, not a forked child.
