@@ -97,11 +97,13 @@ Then, run the script with `./mysh.py script.sh`
 ### Ctrl+C
 Cancels the currently running foreground command without killing the shell itself.
 
+### Glob / Wildcard expansion
+Globs and wildcards get expanded to matcing files. If no matches are found, they are left as a string.
+
 ## Known Limitations
 
 These are documented, intentional gaps — not oversights:
 
-- **No wildcard/glob expansion**: `ls *.txt` will not expand `*.txt` — the literal string is passed to the command. Deliberately left unimplemented rather than shipping a version that mishandles filenames with spaces.
 - **Background jobs cannot be combined with `time`, or `cd`**: `&` is only supported as the terminator of a single, non-chained command.
 - **No environment variable support**: no `export`, no `$VAR` expansion.
 - **`cd` cannot be used inside a pipe or chain** (e.g. `cd dir && ls` is not supported)

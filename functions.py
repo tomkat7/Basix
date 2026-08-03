@@ -4,6 +4,8 @@ import signal
 import time
 import executor as e
 import parser as p
+import glob
+import shlex
 
 
 background_pids=[]
@@ -66,4 +68,50 @@ def mytime(cmd,background,display_cmd):
         end = time.perf_counter()
         print(f"Elapsed time = {end - start:.3f}")
         return ("success", 0)
+
+def expand_globs(cmd):
+    cmd_part = ""
+    cmd_globed = ""
+    start = None
+    quotes = False
+    i = 0
+    while i < len(cmd):
+        if cmd[i] == '"':
+            if not quotes:
+                start = i          
+                quotes = True
+                i += 1
+                continue
+            else:
+                end = i + 1       
+                cmd_globed = cmd_globed + cmd[start:end]
+                start = None
+                quotes = False
+                i = end
+                continue
+        if not quotes:
+            if cmd[i] == " ":
+                cmd_globed = cmd_globed + cmd_part + ""
+                cmd_part = ""
+            elif cmd[i] == "*" or cmd[i] == "?":
+                w_start = cmd.rfind(' ', 0, i) + 1
+                w_end = cmd.find(' ', i)
+                if w_end == -1:
+                    w_end = len(cmd)
+                cmd_part = cmd[w_start:w_end]
+                matches = glob.glob(cmd_part)
+                if matches:
+                    cmd_part = " ".join(matches)
+                else:
+                    pass 
+                cmd_globed = cmd_globed + " " + cmd_part
+                cmd_part = " "
+                i = w_end
+                continue
+            else:
+                cmd_part = " " + cmd_part + cmd[i]
+        i += 1
+    cmd_globed = cmd_globed + cmd_part
+    cmd_globed = shlex.split(cmd_globed)
+    return cmd_globed
 

@@ -65,3 +65,6 @@
 - Added support for scripts
 - Moved the history file to `~/.mysh_config/`
 - Added fg command
+
+## Day 15 - 03/08/26
+- Added support for wildcards (`*` and `?`)

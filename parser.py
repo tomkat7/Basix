@@ -1,6 +1,7 @@
-import shlex
+import functions as f
+
 def parser(cmd):
-    cmd = shlex.split(cmd)
+    cmd = f.expand_globs(cmd)
 
     cmd_segmented=[]
     current_segment=[]
