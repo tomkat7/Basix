@@ -1,14 +1,13 @@
-# MyShell
-
+# Basix
 A Unix shell built from scratch in Python — using raw `fork`, `exec`, and `dup2` syscalls directly, with **no `subprocess` module**. The goal was to actually understand how a shell works under the hood: process creation, file descriptor inheritance, pipes, signal handling, and job control — not just call a library that does it for you.
 
 ## Installation
 
 ```bash
-git clone https://github.com/tomkat7/MyShell.git (or download MyShell.zip from releases)
-cd MyShell
-chmod +x mysh.py
-./mysh.py
+git clone https://github.com/tomkat7/Basix.git (or download Basix.zip from releases)
+cd Basix
+chmod +x basix
+./basix
 ```
 
 Requires Python 3 and a Linux (or other POSIX-compliant) system — this shell relies on `os.fork()`, `os.execvp()`, and Unix signal handling, which are not available on Windows.
@@ -86,13 +85,13 @@ fg 24134
 *Hint: To see all background processes with their PIDs, run `jobs`* 
 
 ### Scripts
-Scripts are supported. To run a script with MyShell, add the shebang with the path of where `mysh.py` is on top of the script file, for example:
+Scripts are supported. To run a script with Basix, add the shebang with the path of where `basix` is on top of the script file, for example:
 
 ```
-#!/home/user/mysh.py
+#!/home/user/basix
 ```
 
-Then, run the script with `./mysh.py script.sh`
+Then, run the script with `./basix script.sh`
 
 ### Ctrl+C
 Cancels the currently running foreground command without killing the shell itself.
@@ -113,7 +112,7 @@ These are documented, intentional gaps — not oversights:
 
 ## Project Structure
 
-- `mysh.py` — main loop, prompt, input dispatch
+- `basix.py` — main loop, prompt, input dispatch
 - `functions.py` — built-ins (cd, time)
 - `executor.py` — executes the parsed command (chains, pipes, and plain command are all processed here)
 - `parser.py` — parses the raw command string into a nested lists for the executor to execute.  

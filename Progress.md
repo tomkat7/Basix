@@ -68,3 +68,6 @@
 
 ## Day 15 - 03/08/26
 - Added support for wildcards (`*` and `?`)
+
+## Day 16 - 10/08/26
+- Changed name from MyShell to Basix

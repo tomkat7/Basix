@@ -37,7 +37,7 @@ def get_next_cmd():
             return line
     else:
         print(f"{purple}╭─ {green}{username}{purple}@{green}{hostname}{purple}:{blue}{os.getcwd()}")
-        return input(f"{purple}╰─{default}$")
+        return input(f"{purple}╰─{default}$ ")
 
 
 
@@ -48,14 +48,14 @@ default = "\001\033[0m\002"
 
 background_finished=[]
 
-config_dir = os.path.expanduser("~/.mysh_config")
+config_dir = os.path.expanduser("~/.basix")
 os.makedirs(config_dir, exist_ok=True)
 
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 signal.signal(signal.SIGTTOU, signal.SIG_IGN)
 
 if not script_mode:
-    histfile = os.path.expanduser("~/.mysh_config/mysh_history.txt")
+    histfile = os.path.expanduser("~/.basix/basix_history.txt")
     try:
         readline.read_history_file(histfile)
     except FileNotFoundError:
