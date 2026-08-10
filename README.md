@@ -92,7 +92,7 @@ fg 24134
 Scripts are supported. To run a script with Basix, add the shebang with the path of where `basix` is on top of the script file, for example:
 
 ```
-#!/home/user/basix
+#!/home/user/basix.py
 ```
 
 Then, run the script with `./basix script.sh`
