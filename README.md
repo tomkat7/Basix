@@ -139,6 +139,7 @@ These are documented, intentional gaps — not oversights:
 Basix's history and aliases files live inside `~/.basix/`.
 - The history file is named `basix_history`
 - The file holding aliases is named `alias`
+
 If a config file is introduced in a future update, it will also be placed in that folder.
 
 ## Why no `subprocess`?
