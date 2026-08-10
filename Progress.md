@@ -71,3 +71,5 @@
 
 ## Day 16 - 10/08/26
 - Changed name from MyShell to Basix
+- Added aliases
+- Added alias show command

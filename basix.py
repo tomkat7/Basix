@@ -69,25 +69,48 @@ while cmd != "exit" and cmd != None:
     if cmd == "":
         print()
     else:
+
         cmd_split = shlex.split(cmd)
+        alias_result = f.find_alias(cmd_split[0])[0]
+
+        if alias_result != 0:
+            cmd = alias_result
+            cmd_split = shlex.split(cmd)
+
         if cmd_split[-1] == "&":
             cmd_split.pop(-1)
             cmd=cmd.removesuffix("&")
             background=True
+
         else:
             background=False
+
         display_cmd = cmd 
+
         if cmd_split[0] == "time":
             f.mytime(cmd,background,display_cmd)
+
+        elif cmd == "alias show":
+                print("---=== Aliases ===---")
+                cmd, operations = p.parser(f'cat {os.path.expanduser("~/.basix/alias")}')
+                e.run_parsed(cmd, operations)    
+
+        elif cmd_split[0] == "alias":
+            f.add_alias(cmd_split)
+    
         elif cmd == "jobs":
+
             if len(f.background_pids) == 0:
                 print("No background jobs running.")
             else:
                 print("-------======= Running Jobs ======= -------")
                 for i in range(len(f.background_pids)):
                     print(f"[{f.background_pids[i]}]: {f.background_cmds[i]}")
+
+
         elif cmd_split[0] == "cd":
             f.cd(cmd_split)
+
         elif cmd_split[0] == "fg":
             if len(cmd_split) != 2:
                 print("Please provide a PID after fg")
@@ -111,6 +134,7 @@ while cmd != "exit" and cmd != None:
                             print(f"fg: no such job ({e})", file=sys.stderr)
                     else:
                         print("PID not found in background processes")
+
         else:
             cmd, operations = p.parser(cmd)
             if background:

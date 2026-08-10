@@ -1,5 +1,5 @@
 # Basix
-A Unix shell built from scratch in Python — using raw `fork`, `exec`, and `dup2` syscalls directly, with **no `subprocess` module**. The goal was to actually understand how a shell works under the hood: process creation, file descriptor inheritance, pipes, signal handling, and job control — not just call a library that does it for you.
+A Linux shell built from scratch in Python — using raw `fork`, `exec`, and `dup2` syscalls directly, with **no `subprocess` module**. The goal was to actually understand how a shell works under the hood: process creation, file descriptor inheritance, pipes, signal handling, and job control.
 
 ## Installation
 
@@ -24,8 +24,11 @@ Standard command execution via `fork` + `execvp`.
 
 ### Built-ins
 ```
-cd [directory]      # bare `cd` goes to home directory, supports ~ expansion
-jobs                 # list currently running background jobs
+cd [directory]            # bare `cd` goes to home directory, supports ~ expansion
+jobs                      # list currently running background jobs
+time [command]            # measure the time a command takes to complete
+alias "command" "alias"   # add an alias
+alias show                # Show all aliases.
 ```
 
 ### Piping
@@ -66,7 +69,8 @@ Runs the command without blocking the shell. Background jobs run in their own pr
 ### Combined operators
 Pipes, redirects, and chains can now be freely combined in a single command:
 
-```cat < in.txt | grep foo > out.txt && echo done
+```
+cat < in.txt | grep foo > out.txt && echo done
 ```
 ### Backgrounding chains
 Adding `&` to the end of a full chain backgrounds the *entire* chain as one job,
@@ -97,13 +101,27 @@ Then, run the script with `./basix script.sh`
 Cancels the currently running foreground command without killing the shell itself.
 
 ### Glob / Wildcard expansion
-Globs and wildcards get expanded to matcing files. If no matches are found, they are left as a string.
+Globs and wildcards get expanded to matching files. If no matches are found, they are left as a string.
 
+### Aliases
+To add an alias, type `alias "command" "alias command"`.
+For example, to make an alias for `sudo dnf upgrade && flatpak update`, you can use
+
+```
+alias "sudo dnf upgrade && flatpak update" "upd"
+```
+
+To view all aliases, run `alias show`
+
+Note:
+- The `alias` command always needs 2 arguments, the command and the alias. 
+- The command needs to be wrapped in quotes. 
+- If you try to add an already existing alias, the new one will replace the old one.
+ 
 ## Known Limitations
 
 These are documented, intentional gaps — not oversights:
 
-- **Background jobs cannot be combined with `time`, or `cd`**: `&` is only supported as the terminator of a single, non-chained command.
 - **No environment variable support**: no `export`, no `$VAR` expansion.
 - **`cd` cannot be used inside a pipe or chain** (e.g. `cd dir && ls` is not supported)
   It must run standalone, since changing directory only makes sense in the shell's
@@ -113,9 +131,15 @@ These are documented, intentional gaps — not oversights:
 ## Project Structure
 
 - `basix.py` — main loop, prompt, input dispatch
-- `functions.py` — built-ins (cd, time)
+- `functions.py` — built-ins (cd, time, add_alias, find_alias, expand_globs etc)
 - `executor.py` — executes the parsed command (chains, pipes, and plain command are all processed here)
 - `parser.py` — parses the raw command string into a nested lists for the executor to execute.  
+
+## Configuration
+Basix's history and aliases files live inside `~/.basix/`.
+- The history file is named `basix_history`
+- The file holding aliases is named `alias`
+If a config file is introduced in a future update, it will also be placed in that folder.
 
 ## Why no `subprocess`?
 

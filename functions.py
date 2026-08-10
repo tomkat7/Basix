@@ -115,3 +115,43 @@ def expand_globs(cmd):
     cmd_globed = shlex.split(cmd_globed)
     return cmd_globed
 
+def find_alias(alias):
+    try:
+        with open(os.path.expanduser("~/.basix/alias"),"r") as f:
+            lines = f.readlines()
+            for num, line in enumerate(lines):
+                if line[0:line.index("=")-1] == alias:
+                    return line[line.index("=")+1:].strip(), num
+            return 0, -1
+    except FileNotFoundError:
+        return 0, -1
+    
+
+def add_alias(cmd):
+    if len(cmd) != 3:
+        print('Error: Command: "alias" must have 2 arguments.')
+    else:
+        if len(cmd[2].split()) != 1:
+            print("Error: alias must only be 1 word")
+        else:
+            command = cmd[1]
+            alias = cmd[2]
+            path = os.path.expanduser("~/.basix/alias")
+
+            result, line_num = find_alias(alias)
+
+            try:
+                with open(path, "r") as f:
+                    lines = f.readlines()
+            except FileNotFoundError:
+                lines = []
+
+            if result != 0:
+                print("Alias already exists. Replacing old one.")
+                lines[line_num] = f"{alias} = {command} \n"
+            else:
+                lines.append(f"{alias} = {command} \n")
+
+            with open(path, "w") as f:
+                f.writelines(lines)
+
