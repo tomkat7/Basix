@@ -36,18 +36,20 @@ For the full list of features and the detailed syntax, view [Syntax.md](Docs/Syn
 
 ## Project Structure
 
+<pre>
 Basix
 ┃
 ┣ .gitignore
-┣  README.md
-┣  [Shell](Shell/)
-┃   ┣  [basix.py](Shell/basix.py)      # main shell loop
-┃   ┣  [functions.py](Shell/functions.py)  # Built-in functions (cd, time, find_alias, add_alias, expand_globs etc.)
-┃   ┣  [parser.py](Shell/parser.py)     # Processes the raw command into nested lists
-┃   ┗  [executor.py](Shell/executor.py)   # Takes the nested lists and executes the commands
-┗  [Docs](Docs/)
-    ┣  [Progress.md](Docs/Progress.md)   # Keeps track of my progress building this shell
-    ┗  [Syntax.md](Docs/Syntax.md)     # Holds the detailed syntax and feature list of the shell
+┣ README.md
+┣ <a href="Shell/">Shell</a>
+┃   ┣ <a href="Shell/basix.py">basix.py</a>      # main shell loop
+┃   ┣ <a href="Shell/functions.py">functions.py</a>  # Built-ins (cd, time, find_alias, add_alias, expand_globs, etc.)
+┃   ┣ <a href="Shell/parser.py">parser.py</a>     # Processes the raw command into nested lists
+┃   ┗ <a href="Shell/executor.py">executor.py</a>   # Takes the nested lists and executes the commands
+┗ <a href="Docs/">Docs</a>
+    ┣ <a href="Docs/Progress.md">Progress.md</a>   # Progress log
+    ┗ <a href="Docs/Syntax.md">Syntax.md</a>     # Detailed syntax and feature list
+</pre>
 
 
 ## Configuration
