@@ -155,3 +155,14 @@ def add_alias(cmd):
             with open(path, "w") as f:
                 f.writelines(lines)
 
+
+def expand_token(cmd):
+    cmd_expanded = []
+    for token in cmd:
+        if token[:2] == "~/":
+            token = os.path.expanduser(token)
+            cmd_expanded.append(token)
+        else:
+            cmd_expanded.append(token)
+    return cmd_expanded
+            

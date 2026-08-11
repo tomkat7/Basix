@@ -73,3 +73,7 @@
 - Changed name from MyShell to Basix
 - Added aliases
 - Added alias show command
+
+## Day 17 -11/08/26
+- Added `;` operator for command chains
+- Commands that include `~/` will now expand to the user's home folder.

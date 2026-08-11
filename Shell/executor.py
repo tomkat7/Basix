@@ -103,3 +103,5 @@ def run_parsed(cmd,operations):
                         continue
                     else:
                         break
+                elif operations[i] == ";":
+                    continue

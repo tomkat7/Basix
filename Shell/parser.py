@@ -2,6 +2,7 @@ import functions as f
 
 def parser(cmd):
     cmd = f.expand_globs(cmd)
+    cmd = f.expand_token(cmd)
 
     cmd_segmented=[]
     current_segment=[]
@@ -14,6 +15,10 @@ def parser(cmd):
         elif token == "||":
             cmd_segmented.append(current_segment)
             operations.append("||")
+            current_segment=[]
+        elif token == ";":
+            cmd_segmented.append(current_segment)
+            operations.append(";")
             current_segment=[]
         else:
             current_segment.append(token)
