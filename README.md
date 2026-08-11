@@ -3,7 +3,7 @@ A Linux shell built from scratch in Python — using raw `fork`, `exec`, and `du
 
 ## Installation
 
-# Method 1: Using git
+### Method 1: Using git
 
 ```bash
 git clone https://github.com/tomkat7/Basix.git 
@@ -11,7 +11,7 @@ cd Basix/Shell
 chmod +x basix.py
 ./basix
 ```
-# Method 2: Download from releases
+### Method 2: Download from releases
 
 1. Download the latest `basix.zip` from the releases.
 2. Extract the zip
@@ -35,7 +35,7 @@ To exit the shell, type `exit`.
 For the full list of features and the detailed syntax, view [Syntax.md](Docs/Syntax.md)
 
 ## Project Structure
-```
+
 Basix
 ┃
 ┣ .gitignore
@@ -48,7 +48,7 @@ Basix
 ┗  [Docs](Docs/)
     ┣  [Progress.md](Docs/Progress.md)   # Keeps track of my progress building this shell
     ┗  [Syntax.md](Docs/Syntax.md)     # Holds the detailed syntax and feature list of the shell
-```
+
 
 ## Configuration
 Basix's history and aliases files live inside `~/.basix/`.
