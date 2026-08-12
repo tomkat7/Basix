@@ -103,11 +103,28 @@ Note:
 - The command needs to be wrapped in quotes. 
 - If you try to add an already existing alias, the new one will replace the old one.
  
-## Known Limitations
+### Variables
+To add a new vaiable, use the `var` command.
+**`var` command use:**
 
-These are documented, intentional gaps — not oversights:
+`var` takes 2 arguments.
+- The variable name and the value
+- A flag to specify the value's data type.
+  Possible flags are: `-i` (integer), `-f` (float), `-s` (string)
+  _Note: The flag is optional. If no flag is provided, the default will be string._
 
-- **No environment variable support**: no `export`, no `$VAR` expansion.
-- **`cd` cannot be used inside a pipe or chain** (e.g. `cd dir && ls` is not supported)
-  It must run standalone, since changing directory only makes sense in the shell's
-  own process, not a forked child.
+**Command template:**
+
+```
+var [Variable_name] = [Value] -flag
+```
+
+#### Rules:
+- The variable name, the equals sign ("=") and the variable value must all be seperated by spaces.
+- If a non-existent flag is provided, the default (string) will be used instead.
+
+To view the value of a variable, use `echo $variable_name`.
+
+**Built-in variables:**
+- `$RANDOM`: Returns a random number between 0 and 99999.
+- `$?`: Returns the error code from the last command executed (0: Success, 1: Failure) 

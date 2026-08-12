@@ -2,10 +2,8 @@ import os
 import functions as f
 import signal
 import sys
-import shlex
 
-cmd = "grep py < test.txt && echo Done"
-
+exit_code = "None"
 
 def run_stage(cmd, redirects, stdin_fd=None, stdout_fd=None,):
     signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -89,6 +87,7 @@ def run_parsed(cmd,operations):
     for i, segment in enumerate(cmd):
         status = run_segment(segment)
         if os.WIFEXITED(status[1]):
+            global exit_code
             exit_code = os.WEXITSTATUS(status[1])
             if len(operations) > 0:
                 if i > len(operations) - 1:

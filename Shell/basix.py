@@ -99,7 +99,6 @@ while cmd != "exit" and cmd != None:
             f.add_alias(cmd_split)
     
         elif cmd == "jobs":
-
             if len(f.background_pids) == 0:
                 print("No background jobs running.")
             else:
@@ -134,6 +133,14 @@ while cmd != "exit" and cmd != None:
                             print(f"fg: no such job ({e})", file=sys.stderr)
                     else:
                         print("PID not found in background processes")
+                        
+        elif cmd_split[0] == "var":
+            if len(cmd_split) == 5:
+                f.add_var(cmd_split,cmd_split[4])
+            elif len(cmd_split) == 4:
+                f.add_var(cmd_split)
+            else: 
+                print('Syntax Error: Command "var" takes 2 arguments')
 
         else:
             cmd, operations = p.parser(cmd)

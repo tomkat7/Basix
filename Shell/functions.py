@@ -6,8 +6,9 @@ import executor as e
 import parser as p
 import glob
 import shlex
+import random
 
-
+variables = {}
 background_pids=[]
 background_cmds=[]
 
@@ -166,3 +167,34 @@ def expand_token(cmd):
             cmd_expanded.append(token)
     return cmd_expanded
             
+def add_var(cmd,type="-s"):
+    if type == "-s":
+        variables[cmd[1]] = cmd[3] 
+    elif type == "-i":
+        try:
+            variables[cmd[1]] = int(cmd[3]) 
+        except ValueError:
+            print(f'Error: "{cmd[3]}" is not a number.')
+    elif type == "-f":
+        try:
+            variables[cmd[1]] = float(cmd[3]) 
+        except ValueError:
+            print(f'Error: "{cmd[3]}" is not a number.')
+
+def replace_var(cmd):
+    cmd_replaced = []
+    for token in cmd:
+        if token[0] == "$":
+            token = token.removeprefix("$")
+            if token == "RANDOM":
+                cmd_replaced.append(str(random.randint(0, 99999)))
+            elif token == "?":
+                cmd_replaced.append(str(e.exit_code))
+            else:
+                try:
+                    cmd_replaced.append(str(variables[token]))
+                except KeyError:
+                    print(f'Error: Undefined variable: "${token}"')
+        else:
+            cmd_replaced.append(token)
+    return cmd_replaced
