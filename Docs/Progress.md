@@ -78,3 +78,10 @@
 - Added `;` operator for command chains
 - Commands that include `~/` will now expand to the user's home folder.
 - Organised github repo and README.md
+
+## Day 18 - 12/08/26
+- Added support for variables
+
+## Day 19 - 13/08/26
+- Added support for deleting existing variables. 
+- Started developing evaluation logic to support mathematical operations between variables. 

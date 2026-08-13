@@ -168,9 +168,7 @@ def expand_token(cmd):
     return cmd_expanded
             
 def add_var(cmd,type="-s"):
-    if type == "-s":
-        variables[cmd[1]] = cmd[3] 
-    elif type == "-i":
+    if type == "-i":
         try:
             variables[cmd[1]] = int(cmd[3]) 
         except ValueError:
@@ -180,6 +178,11 @@ def add_var(cmd,type="-s"):
             variables[cmd[1]] = float(cmd[3]) 
         except ValueError:
             print(f'Error: "{cmd[3]}" is not a number.')
+    else:
+        variables[cmd[1]] = cmd[3] 
+        if type != "-s":
+            print(f"Warning: Unknown flag '{type}'. Defaulting to string.")
+
 
 def replace_var(cmd):
     cmd_replaced = []
@@ -198,3 +201,43 @@ def replace_var(cmd):
         else:
             cmd_replaced.append(token)
     return cmd_replaced
+
+def del_var(var):
+    var = var.removeprefix("&")
+    if var in variables:
+        variables.pop(var)
+    else:
+        print("Error: This variable doesn't exist.")
+
+def evaluate(cmd):
+    if "=" in cmd:
+        eq_index = cmd.index("=")
+        if cmd[-1].startswith("-"):
+            expression = cmd[eq_index+1:-1]
+        else:
+            expression = cmd[eq_index+1:]
+
+        expression = replace_var(expression)
+        i = 0
+        result = expression[0]
+        while i < len(expression)-2:
+            try:
+                if expression[i+1] == "+":
+                    result = result + expression[i+2]
+                    i = i + 2
+                elif expression[i+1] == "-":
+                    result = result - expression[i+2]
+                    i = i + 2
+                elif expression[i+1] == "*":
+                    result = result * expression[i+2]
+                    i = i + 2
+                elif expression[i+1] == "/":
+                    result = result / expression[i+2]
+                    i = i + 2                    
+            except TypeError:
+                print(f'Error: Cannot evaluate operation: {" ".join(expression[i:i+2])}')
+                i = 999
+        return result
+    else:
+        print("Error: No '=' sign was found.")
+    

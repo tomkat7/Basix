@@ -133,15 +133,21 @@ while cmd != "exit" and cmd != None:
                             print(f"fg: no such job ({e})", file=sys.stderr)
                     else:
                         print("PID not found in background processes")
-                        
+       
+        elif cmd[:7] == "var del":
+            if len(cmd_split) == 3:
+                f.del_var(cmd_split[2])
+            else:
+                print("Error: Please provide one variable to delete.")                
+       
         elif cmd_split[0] == "var":
             if len(cmd_split) == 5:
                 f.add_var(cmd_split,cmd_split[4])
             elif len(cmd_split) == 4:
                 f.add_var(cmd_split)
             else: 
-                print('Syntax Error: Command "var" takes 2 arguments')
-
+                print('Syntax Error: Command "var" takes 2 arguments') 
+        
         else:
             cmd, operations = p.parser(cmd)
             if background:
