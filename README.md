@@ -1,6 +1,11 @@
 # Basix
 A Linux shell built from scratch in Python — using raw `fork`, `exec`, and `dup2` syscalls directly, with **no `subprocess` module**. The goal was to actually understand how a shell works under the hood: process creation, file descriptor inheritance, pipes, signal handling, and job control.
 
+### Showcase Video:
+[showcase.webm](https://github.com/user-attachments/assets/670a2087-e776-41c8-9175-075280bc0fc0)
+
+
+
 ## Installation
 
 ### Method 1: Using git
