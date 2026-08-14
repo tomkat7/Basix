@@ -31,7 +31,8 @@ To exit the shell, type `exit`.
 - Wildcard and tilde expansion
 - Script mode with #! support
 - Persistent history
-- Variables
+- Variables creation - deletion
+- Mathematical operations between variables
 
 For the full list of features and the detailed syntax, view [Syntax.md](Docs/Syntax.md)
 
