@@ -167,40 +167,45 @@ def expand_token(cmd):
             cmd_expanded.append(token)
     return cmd_expanded
             
-def add_var(cmd,type="-s"):
+def add_var(var_name,value,type="-s"):
     if type == "-i":
         try:
-            variables[cmd[1]] = int(cmd[3]) 
+            variables[var_name] = int(value) 
         except ValueError:
-            print(f'Error: "{cmd[3]}" is not a number.')
+            print(f'Error: "{value}" is not a number.')
     elif type == "-f":
         try:
-            variables[cmd[1]] = float(cmd[3]) 
+            variables[var_name] = float(value) 
         except ValueError:
-            print(f'Error: "{cmd[3]}" is not a number.')
+            print(f'Error: "{value}" is not a number.')
     else:
-        variables[cmd[1]] = cmd[3] 
+        variables[var_name] = value
         if type != "-s":
             print(f"Warning: Unknown flag '{type}'. Defaulting to string.")
 
 
 def replace_var(cmd):
-    cmd_replaced = []
+    cmd_str = []
+    cmd_og = []
     for token in cmd:
         if token[0] == "$":
             token = token.removeprefix("$")
             if token == "RANDOM":
-                cmd_replaced.append(str(random.randint(0, 99999)))
+                cmd_str.append(str(random.randint(0, 99999)))
+                cmd_og.append(random.randint(0, 99999))
             elif token == "?":
-                cmd_replaced.append(str(e.exit_code))
+                cmd_str.append(str(e.exit_code))
+                cmd_og.append(e.exit_code)
             else:
                 try:
-                    cmd_replaced.append(str(variables[token]))
+                    cmd_str.append(str(variables[token]))
+                    cmd_og.append(variables[token])
                 except KeyError:
                     print(f'Error: Undefined variable: "${token}"')
         else:
-            cmd_replaced.append(token)
-    return cmd_replaced
+            cmd_str.append(token)
+            cmd_og.append(token)
+    return cmd_str, cmd_og
 
 def del_var(var):
     var = var.removeprefix("&")
@@ -214,10 +219,12 @@ def evaluate(cmd):
         eq_index = cmd.index("=")
         if cmd[-1].startswith("-"):
             expression = cmd[eq_index+1:-1]
+            flag = cmd[-1]
         else:
             expression = cmd[eq_index+1:]
+            flag = "-s"
 
-        expression = replace_var(expression)
+        expression = replace_var(expression)[1]
         i = 0
         result = expression[0]
         while i < len(expression)-2:
@@ -235,9 +242,13 @@ def evaluate(cmd):
                     result = result / expression[i+2]
                     i = i + 2                    
             except TypeError:
-                print(f'Error: Cannot evaluate operation: {" ".join(expression[i:i+2])}')
-                i = 999
-        return result
+                expr_str = []
+                for value in expression[i:i+3]:
+                    expr_str.append(str(value))
+                print(f'Error: Cannot evaluate operation: {" ".join(expr_str)}')
+                return None, None
+        return result, flag
     else:
         print("Error: No '=' sign was found.")
+        return None, None
     

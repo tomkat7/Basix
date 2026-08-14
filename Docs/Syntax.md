@@ -105,13 +105,15 @@ Note:
  
 ### Variables
 To add a new vaiable, use the `var` command.
+
 **`var` command use:**
 
 `var` takes 2 arguments.
 - The variable name and the value
 - A flag to specify the value's data type.
   Possible flags are: `-i` (integer), `-f` (float), `-s` (string)
-  _Note: The flag is optional. If no flag is provided, the default will be string._
+
+_Note: The flag is optional. If no flag is provided, the default will be string._
 
 **Command template:**
 
@@ -128,3 +130,25 @@ To view the value of a variable, use `echo $variable_name`.
 **Built-in variables:**
 - `$RANDOM`: Returns a random number between 0 and 99999.
 - `$?`: Returns the error code from the last command executed (0: Success, 1: Failure) 
+
+### Variable math
+Variables (and literals) can be combined with `+`, `-`, `*`, `/` on the right-hand side of `var`:
+
+```
+var a = 2 -i
+var b = 3 -i
+var x = $a + $b * 2 -i
+```
+
+Notes:
+- Operations are evaluated strictly left-to-right — there is no operator precedence (no BEDMAS). `$a - $b * $c` is `(($a - $b) * $c)`, not standard math order.
+- String variables can be combined with `*` and `+` (repetition and concatenation e.g. `"hi" * 3`, `"test" + "test1"`) but not , `-`, or `/` — mixing incompatible types will print an error and the variable will not be created.
+- The result's type is controlled by the trailing flag, same as a normal `var` assignment (`-i`, `-f`, `-s`).
+
+### Deleting variables
+
+```
+var del [variable_name]
+```
+
+Removes a variable. If the variable doesn't exist, an error is printed.

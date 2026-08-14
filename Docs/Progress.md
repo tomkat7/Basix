@@ -84,4 +84,8 @@
 
 ## Day 19 - 13/08/26
 - Added support for deleting existing variables. 
-- Started developing evaluation logic to support mathematical operations between variables. 
+- Started developing evaluation logic to support mathematical operations between variables.
+
+## Day 20 - 14/08/26
+- Completed evaluation logic.
+- Mathematical operation  (*, /, +, -) can be used between variables.

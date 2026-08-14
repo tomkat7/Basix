@@ -141,13 +141,14 @@ while cmd != "exit" and cmd != None:
                 print("Error: Please provide one variable to delete.")                
        
         elif cmd_split[0] == "var":
-            if len(cmd_split) == 5:
-                f.add_var(cmd_split,cmd_split[4])
-            elif len(cmd_split) == 4:
-                f.add_var(cmd_split)
-            else: 
-                print('Syntax Error: Command "var" takes 2 arguments') 
-        
+            if len(cmd_split) <  4:
+                print('Syntax Error: "var" requires a name, "=", and a value (e.g. var x = 5)')
+            else:
+                value, flag = f.evaluate(cmd_split)
+                var_name = cmd_split[1]
+                if value != None:
+                    f.add_var(var_name,value,flag)
+            
         else:
             cmd, operations = p.parser(cmd)
             if background:

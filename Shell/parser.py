@@ -3,7 +3,7 @@ import functions as f
 def parser(cmd):
     cmd = f.expand_globs(cmd)
     cmd = f.expand_token(cmd)
-    cmd = f.replace_var(cmd)
+    cmd = f.replace_var(cmd)[0]
 
     cmd_segmented=[]
     current_segment=[]
