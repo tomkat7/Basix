@@ -79,12 +79,12 @@ def expand_globs(cmd):
     while i < len(cmd):
         if cmd[i] == '"':
             if not quotes:
-                start = i          
+                start = i
                 quotes = True
                 i += 1
                 continue
             else:
-                end = i + 1       
+                end = i + 1
                 cmd_globed = cmd_globed + cmd[start:end]
                 start = None
                 quotes = False
@@ -104,7 +104,7 @@ def expand_globs(cmd):
                 if matches:
                     cmd_part = " ".join(matches)
                 else:
-                    pass 
+                    pass
                 cmd_globed = cmd_globed + " " + cmd_part
                 cmd_part = " "
                 i = w_end
@@ -126,7 +126,7 @@ def find_alias(alias):
             return 0, -1
     except FileNotFoundError:
         return 0, -1
-    
+
 
 def add_alias(cmd):
     if len(cmd) != 3:
@@ -166,16 +166,16 @@ def expand_token(cmd):
         else:
             cmd_expanded.append(token)
     return cmd_expanded
-            
+
 def add_var(var_name,value,type="-s"):
     if type == "-i":
         try:
-            variables[var_name] = int(value) 
+            variables[var_name] = int(value)
         except ValueError:
             print(f'Error: "{value}" is not a number.')
     elif type == "-f":
         try:
-            variables[var_name] = float(value) 
+            variables[var_name] = float(value)
         except ValueError:
             print(f'Error: "{value}" is not a number.')
     else:
@@ -198,10 +198,14 @@ def replace_var(cmd):
                 cmd_og.append(e.exit_code)
             else:
                 try:
-                    cmd_str.append(str(variables[token]))
-                    cmd_og.append(variables[token])
+                    cmd_str.append(str(os.environ[token]))
+                    cmd_og.append(os.environ[token])
                 except KeyError:
-                    print(f'Error: Undefined variable: "${token}"')
+                    try:
+                        cmd_str.append(str(variables[token]))
+                        cmd_og.append(variables[token])
+                    except KeyError:
+                        print(f'Error: Undefined variable: "${token}"')
         else:
             cmd_str.append(token)
             cmd_og.append(token)
@@ -240,7 +244,7 @@ def evaluate(cmd):
                     i = i + 2
                 elif expression[i+1] == "/":
                     result = result / expression[i+2]
-                    i = i + 2                    
+                    i = i + 2
             except TypeError:
                 expr_str = []
                 for value in expression[i:i+3]:
@@ -251,4 +255,3 @@ def evaluate(cmd):
     else:
         print("Error: No '=' sign was found.")
         return None, None
-    

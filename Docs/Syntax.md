@@ -131,6 +131,12 @@ To view the value of a variable, use `echo $variable_name`.
 - `$RANDOM`: Returns a random number between 0 and 99999.
 - `$?`: Returns the error code from the last command executed (0: Success, 1: Failure) 
 
+**Environment Variables**
+- You can view the value of an env. variable like `$HOME` with `echo $HOME`.
+- Env. variables are also expanded inside other commands.
+
+**_Warning: No variable is expanded if it is next to another command (ex. `echo $HOME/Basix` will fail.). Only if its seperated by spaces._**
+
 ### Variable math
 Variables (and literals) can be combined with `+`, `-`, `*`, `/` on the right-hand side of `var`:
 

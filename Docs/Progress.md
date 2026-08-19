@@ -89,3 +89,6 @@
 ## Day 20 - 14/08/26
 - Completed evaluation logic.
 - Mathematical operation  (*, /, +, -) can be used between variables.
+
+## Day 21 - 19/08/26
+- Added support for environment variable expansion.
