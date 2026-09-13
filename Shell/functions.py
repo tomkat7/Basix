@@ -188,27 +188,49 @@ def replace_var(cmd):
     cmd_str = []
     cmd_og = []
     for token in cmd:
-        if token[0] == "$":
-            token = token.removeprefix("$")
-            if token == "RANDOM":
-                cmd_str.append(str(random.randint(0, 99999)))
-                cmd_og.append(random.randint(0, 99999))
-            elif token == "?":
-                cmd_str.append(str(e.exit_code))
-                cmd_og.append(e.exit_code)
-            else:
+        buffer = ""
+        i = 0
+        error = False
+        is_pure_var = (token.startswith("${") and token.endswith("}")
+                       and token.count("$") == 1)
+        pure_value = None
+        while i < len(token):
+            if token[i] == "$":
                 try:
-                    cmd_str.append(str(os.environ[token]))
-                    cmd_og.append(os.environ[token])
-                except KeyError:
-                    try:
-                        cmd_str.append(str(variables[token]))
-                        cmd_og.append(variables[token])
-                    except KeyError:
-                        print(f'Error: Undefined variable: "${token}"')
-        else:
-            cmd_str.append(token)
-            cmd_og.append(token)
+                    start = token.index("{", i)
+                except ValueError:
+                    print('Syntax Error: No "{" was found')
+                    error = True
+                    break
+                try:
+                    end = token.index("}", i)
+                except ValueError:
+                    print('Syntax Error: No "}" was found')
+                    error = True
+                    break
+                name = token[start+1:end]
+                if name == "RANDOM":
+                    value = random.randint(0, 99999)
+                elif name == "?":
+                    value = e.exit_code
+                elif name in variables:
+                    value = variables[name]
+                elif name in os.environ:
+                    value = os.environ[name]
+                else:
+                    print(f'Error: Undefined variable: "${{{name}}}"')
+                    error = True
+                    break
+                buffer += str(value)
+                pure_value = value
+                i = end + 1
+            else:
+                buffer += token[i]
+                i += 1
+        if error:
+            continue
+        cmd_str.append(buffer) #Used in parser
+        cmd_og.append(pure_value if is_pure_var else buffer) # used in evaluate()
     return cmd_str, cmd_og
 
 def del_var(var):

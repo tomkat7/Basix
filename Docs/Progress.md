@@ -92,3 +92,6 @@
 
 ## Day 21 - 19/08/26
 - Added support for environment variable expansion.
+
+## Day 22 - 13/09/26
+- Added support for environment variable expansion next to other commands, like `echo ${HOME}/folder1/folder2`
