@@ -38,6 +38,7 @@ To exit the shell, type `exit`.
 - Persistent history
 - Variables creation - deletion
 - Mathematical operations between variables
+- Playes tic tac toe
 
 For the full list of features and the detailed syntax, view [Syntax.md](Docs/Syntax.md)
 

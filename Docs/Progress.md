@@ -95,3 +95,6 @@
 
 ## Day 22 - 13/09/26
 - Added support for environment variable expansion next to other commands, like `echo ${HOME}/folder1/folder2`
+
+## Day 23 - 29/09/26
+- Added a tic tac toe minigame, utilising a custom algorithm

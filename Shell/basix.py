@@ -25,7 +25,7 @@ def get_next_cmd():
     green = "\001\033[32m\002"
     blue = "\001\033[34m\002"
     default = "\001\033[0m\002"
-    
+
     if script_mode:
         while True:
             line = script_file.readline()
@@ -50,6 +50,14 @@ background_finished=[]
 
 config_dir = os.path.expanduser("~/.basix")
 os.makedirs(config_dir, exist_ok=True)
+
+if not(os.path.exists(config_dir+"/patterns.json")):
+    mv,ops=p.parser(f"mv patterns.json {config_dir+"/"}")
+    e.run_parsed(mv,ops)
+elif os.path.exists("patterns.json"):
+    mv,ops=p.parser("rm patterns.json")
+    e.run_parsed(mv,ops)
+
 
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 signal.signal(signal.SIGTTOU, signal.SIG_IGN)
@@ -85,7 +93,7 @@ while cmd != "exit" and cmd != None:
         else:
             background=False
 
-        display_cmd = cmd 
+        display_cmd = cmd
 
         if cmd_split[0] == "time":
             f.mytime(cmd,background,display_cmd)
@@ -93,11 +101,11 @@ while cmd != "exit" and cmd != None:
         elif cmd == "alias show":
                 print("---=== Aliases ===---")
                 cmd, operations = p.parser(f'cat {os.path.expanduser("~/.basix/alias")}')
-                e.run_parsed(cmd, operations)    
+                e.run_parsed(cmd, operations)
 
         elif cmd_split[0] == "alias":
             f.add_alias(cmd_split)
-    
+
         elif cmd == "jobs":
             if len(f.background_pids) == 0:
                 print("No background jobs running.")
@@ -110,6 +118,10 @@ while cmd != "exit" and cmd != None:
         elif cmd_split[0] == "cd":
             f.cd(cmd_split)
 
+        elif cmd == "tic":
+            cmd, ops = p.parser("python3 tic_tac_toe.py")
+            e.run_parsed(cmd,ops)
+
         elif cmd_split[0] == "fg":
             if len(cmd_split) != 2:
                 print("Please provide a PID after fg")
@@ -120,7 +132,7 @@ while cmd != "exit" and cmd != None:
                 except ValueError:
                     print("Enter a valid PID")
                     is_int = False
-                if is_int:    
+                if is_int:
                     if int(cmd_split[1]) in f.background_pids:
                         try:
                             os.tcsetpgrp(sys.stdin.fileno(), int(cmd_split[1]))
@@ -133,13 +145,13 @@ while cmd != "exit" and cmd != None:
                             print(f"fg: no such job ({e})", file=sys.stderr)
                     else:
                         print("PID not found in background processes")
-       
+
         elif cmd[:7] == "var del":
             if len(cmd_split) == 3:
                 f.del_var(cmd_split[2])
             else:
-                print("Error: Please provide one variable to delete.")                
-       
+                print("Error: Please provide one variable to delete.")
+
         elif cmd_split[0] == "var":
             if len(cmd_split) <  4:
                 print('Syntax Error: "var" requires a name, "=", and a value (e.g. var x = 5)')
@@ -148,7 +160,7 @@ while cmd != "exit" and cmd != None:
                 var_name = cmd_split[1]
                 if value != None:
                     f.add_var(var_name,value,flag)
-            
+
         else:
             cmd, operations = p.parser(cmd)
             if background:

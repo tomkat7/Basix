@@ -13,6 +13,7 @@ jobs                      # list currently running background jobs
 time [command]            # measure the time a command takes to complete
 alias "command" "alias"   # add an alias
 alias show                # Show all aliases.
+tic                       # Plays tic tac toe
 ```
 
 ### Piping
