@@ -25,6 +25,8 @@ chmod +x basix.py
 
 Requires Python 3 and a Linux (or other POSIX-compliant) system — this shell relies on `os.fork()`, `os.execvp()`, and Unix signal handling, which are not available on Windows.
 
+_Has been tested and works on Linux and Android (with Termux)_
+
 To exit the shell, type `exit`.
 
 ## Syntax and Features
