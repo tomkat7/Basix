@@ -3,11 +3,24 @@ import json
 import os
 
 SQUARES = ["11","12","13","21","22","23","31","32","33"]
-PATH = os.path.expanduser("~/.basix/patterns.json")
+PATH = os.path.expanduser("~/.basix/")
 
 if os.path.exists(PATH):
-    with open(PATH, "r") as patterns:
+    with open(PATH+"patterns.json", "r") as patterns:
         base = json.load(patterns)
+    if os.path.exists(PATH+"game_c.json"):
+        with open(PATH+"game_c.json", "r") as games:
+            count = json.load(games)
+            count["games"]+=1
+            if count["games"] >= 5:
+                base = {sq:[base[sq][0]*0.9,2,base[sq][1]*0.9] for sq in SQUARES}
+                with open(PATH+"patterns.json", "w") as patterns:
+                    json.dump(base, patterns)
+                count["games"] = 0
+    else:                           
+         count = {"games": 1}
+         with open(PATH+"game_c.json", "w") as games:
+             json.dump(count, games)
 else:
     base = {sq:[0,0] for sq in SQUARES}
 
@@ -182,8 +195,10 @@ def learn(won):
         for sq in player_choices:
             base[sq][0]+=1
     os.makedirs(os.path.dirname(PATH), exist_ok=True)
-    with open(PATH,"w") as patterns:
+    with open(PATH+"patterns.json","w") as patterns:
         json.dump(base,patterns)
+    with open(PATH+"game_c.json","w") as games:
+        json.dump(count,games)
 
 print("Tic Tac Toe: you are X, the computer is O.")
 print("Type the number of a free square to play there (row first, then column).")
