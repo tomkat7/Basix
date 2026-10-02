@@ -52,7 +52,7 @@ config_dir = os.path.expanduser("~/.basix")
 os.makedirs(config_dir, exist_ok=True)
 
 if not(os.path.exists(config_dir+"/patterns.json")):
-    mv,ops=p.parser(f"mv patterns.json {config_dir+"/"}")
+    mv,ops=p.parser(f'mv patterns.json {config_dir+"/"}')
     e.run_parsed(mv,ops)
 elif os.path.exists("patterns.json"):
     mv,ops=p.parser("rm patterns.json")
